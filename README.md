@@ -1,4 +1,4 @@
-** Sistema ClassNote **
+**Sistema ClassNote**
 
 _Um sistema para ajudá-lo a alcançar seu sonho e objetivo: a sua formatura. Gerencie o conteúdo de suas aulas, e nunca esqueça da suas para provas e entregas de trabalhos, tudo isso em um único local._
 
