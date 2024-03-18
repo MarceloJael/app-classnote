@@ -1,0 +1,122 @@
+html {
+  font-family: "Montserrat";
+}
+
+a:link {  		
+    color: blue;  		
+    text-decoration:none;    	
+ }    
+ a:visited {  		
+    color: purple;  		
+    text-decoration:none;  	
+ }    	
+ a:active {  		
+    background-color: yellow;  		
+    text-decoration:none;  	
+ }    	
+ a:hover {  		
+    color:red;  		
+    text-decoration:none;  	
+ } 
+
+select {
+    width: 100%;
+    height: auto;
+}
+
+input{
+    width: 100%;
+    height: auto;
+}
+
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    font-size: 40px !important;
+    line-height: 80px !important;
+    padding: 0px;
+    margin: 0px;
+}
+
+h2 {
+    font-size: 20px !important;
+    line-height: 40px !important;
+    padding: 0px;
+    margin: 0px;
+}
+
+h3 {
+    font-size: 15px;
+    line-height: 30px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.logo {
+    height: 100px;
+    width: auto;
+}
+
+
+/* INDEX */
+
+.pag-login {
+    background-image: url('./img/bg-login.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0; 
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.login {
+    width: 40vw;
+    height: auto;
+    text-align: center;
+}
+
+.text-logo-dark {
+    font-weight: 600;
+    color: #002E6A;
+}
+
+.text-logo-light {
+    font-weight: 600;
+    color: #f8f9fa;
+}
+
+.btn-Login {
+    font-weight: 600;
+    background: #5F00BA;
+    color: #f8f9fa;
+    font-size: 18px;
+    border: 0px;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.div-cadastro {
+    background: #5F00BA;
+    border-radius: 5px;
+    color: #f8f9fa;
+}
+
+.btn-cadastro {
+    background: #06d6a0;
+    color: #f8f9fa;
+    border: 0px;
+    border-radius: 5px;
+}
+
+/* HOMEPAGE */
+.card-home {
+    background: #5F00BA;
+    border-radius: 5px;
+    color: #f8f9fa;;
+}
