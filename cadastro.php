@@ -1,79 +1,109 @@
-<!doctype html>
-<html lang="pt-BR">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ClassNote - Sistema de gerenciamento de notas</title>
+<?php 
+include './includes/head.php'; 
+include './bd/insert_cadastro.php';
 
-        <!-- FAVICON -->
-        <link rel="icon" type="image/png" href="./assests/img/favicon-classnote.png">
+$nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
+$sobrenome = isset($_GET['sobrenome']) ? htmlspecialchars($_GET['sobrenome']) : '';
+$email = isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '';
+$instituicao = isset($_GET['instituicao']) ? htmlspecialchars($_GET['instituicao']) : '';
+$privacidade = isset($_GET['privacidade']) ? htmlspecialchars($_GET['privacidade']) : '';
+$comunicacao= isset($_GET['comunicacao']) ? htmlspecialchars($_GET['comunicacao']) : '';
 
-        <!-- GOOGLE FONTS -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+?>
 
-        <!-- ICONS AWESOME -->
-        <script src="https://kit.fontawesome.com/5bdb09f0fb.js" crossorigin="anonymous"></script>
+    <div class="cadastro">
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <div class="row div-sombra p-3 bg-secundaria">
 
-        <!-- BOOTSTRAP -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+                <div class="col-12 justify-content-center align-items-center text-center my-3">
 
-        <!-- Style CSS -->
-        <link href="./assests/style.css" rel="stylesheet">
-    </head>
-    <body>
+                    <?php 
+                        if (isset($_GET['nome'])) {
+                            echo "<h2>EDITAR SUA CONTA</h2> <br />";
+                        } else {
+                            echo "<h2>CRIAR NOVA CONTA</h2> <br />";
+                        }
+                    ?>
 
-    <div class="container">
-
-        <div class="cadastro my-5 text-center">
-
-            <h1 class="py-2 text-logo-dark">Crie uma nova conta</h1>
-
-            <p class="text-logo-dark">Crie uma nova conta para acessar o ClassNote e desfrutar de todas as funcionalidades disponíveis no sistema.</p>
-
-            <form action="home.php" method="POST" class="px-3">
-
-                <div class="row">
-
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <input type="text" class="form-control my-3 mb-3 text-center" placeholder="digite o seu nome" id="nome" name="nome" required>
-                    </div>
-
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <input type="text" class="form-control my-3 mb-3 text-center" placeholder="digite o seu sobrenome" id="sobrenome" name="sobreome" required>
-                    </div>
-
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        <input type="email" class="form-control my-3 mb-3 text-center" placeholder="digite o seu e-email" id="email" name="email" required>
-                    </div>
-
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <input type="password" class="form-control my-3 mb-3 text-center" placeholder="Digite a senha" id="senha" name="senha" required>
-                    </div>
-
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <input type="password" class="form-control my-3 mb-3 text-center" placeholder="Confirme a senha" id="senha2" name="senha2" required>
-                    </div>
-
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        <input type="text" class="form-control my-3 mb-3 text-center" placeholder="Aonde você estuda?" id="escola" name="escola" required>
-                    </div>
-
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        <button type="submit" class="btn-Login">Entrar</button>
-                    </div>
-                
+                    <p>
+                        Use essa conta para acessar o ClassNote e desfrutar de todas as funcionalidades disponíveis no aplicativo.
+                    </p>
                 </div>
+
+                <?php if ($erro): ?>
+                    <div class="col-12 text-center p-3 error mb-3">
+                        <h5><i class="fa-solid fa-triangle-exclamation"></i> <?php echo $erro; ?> </h3>
+                    </div>
+                <?php endif; ?>
                 
-            </form>
+                <?php 
+                    if (isset($_GET['nome'])) {
+                        echo '<form action="./bd/update_cadastro.php" method="POST" onsubmit="return validarFormulario()">';
+                    } else {
+                        echo '<form action="./bd/insert_cadastro.php" method="POST" onsubmit="return validarFormulario()">';
+                    }
+                ?>
+                
+                    <div class="row">
 
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 justify-content-center align-items-center text-center">
+                            <input type="text" class="my-1 text-center" placeholder="Digite seu nome" id="nome" name="nome" value="<?php echo $nome; ?>" required>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 justify-content-center align-items-center text-center">
+                            <input type="text" class="my-1 text-center" placeholder="Digite seu sobrenome" id="sobrenome" name="sobrenome" value="<?php echo $sobrenome; ?>"  required>
+                        </div>
+
+                        <div class="col-12 justify-content-center align-items-center text-center">
+                            <input type="email" class="my-1 text-center" placeholder="Digite seu e-mail" id="email" name="email" value="<?php echo $email; ?>" required>
+                        </div>
+                        
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 justify-content-center align-items-center text-center">
+                            <input type="password" class="my-1 text-center" placeholder="Digite sua senha" id="senha" name="senha" required>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 justify-content-center align-items-center text-center">
+                            <input type="password" class="my-1 text-center" placeholder="Confirme sua senha" id="senha-conf" name="senha-conf" required>
+                        </div>
+
+                        <div class="col-12 justify-content-center align-items-center text-center">
+                            <input type="text" class="my-1 text-center" placeholder="Qual sua instituição de ensino?" id="instituicao" name="instituicao" value="<?php echo $instituicao; ?>" required>
+                        </div>
+
+                        <div class="col-12 justify-content-center align-items-center text-center my-1">
+                            <input type="checkbox" id="privacidade" name="privacidade" value="privacidade">
+                            <label for="privacidade"> Concordo com as politicas de privacidade</label>
+                        </div>
+
+                        <div class="col-12 justify-content-center align-items-center text-center my-1">
+                            <input type="checkbox" id="comunicacao" name="comunicacao" value="comunicacao">
+                            <label for="comunicacao"> Quero receber comunicação por e-mail/Whatsapp</label>
+                        </div>
+
+                        <div class="col-12 justify-content-center align-items-center text-center">
+                            <button type="submit" class="m-3 text-center btn-cadastro">Criar nova conta <i class="fa-solid fa-circle-plus"></i></button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
         </div>
-
     </div>
-        
-    <!-- BOOTSTRAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-    </body>
-</html>
+    <script>
+        function validarFormulario() {
+            var senha = document.getElementById("senha").value;
+            var senhaConf = document.getElementById("senha-conf").value;
+
+            if (senha !== senhaConf) {
+                alert("As senhas não coincidem. Por favor, digite novamente.");
+                return false;
+            }
+
+            return true; 
+        }
+    </script>
+
+
+<?php include './includes/footer.php'; ?>

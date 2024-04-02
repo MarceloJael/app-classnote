@@ -1,70 +1,110 @@
-<!doctype html>
-<html lang="pt-BR">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ClassNote - Sistema de gerenciamento de notas</title>
+<?php 
 
-        <!-- FAVICON -->
-        <link rel="icon" type="image/png" href="./assests/img/favicon-classnote.png">
+include './bd/verificar_autenticacao.php';
+include './includes/head.php'; 
 
-        <!-- GOOGLE FONTS -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+$id_aula = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
+$data_aula = isset($_GET['data_aula']) ? htmlspecialchars($_GET['data_aula']) : '';
+$anotacao = isset($_GET['anotacao']) ? htmlspecialchars($_GET['anotacao']) : '';
+$link_aula = isset($_GET['link_aula']) ? htmlspecialchars($_GET['link_aula']) : '';
+$numero_aula = isset($_GET['numero_aula']) ? htmlspecialchars($_GET['numero_aula']) : '';
 
-        <!-- ICONS AWESOME -->
-        <script src="https://kit.fontawesome.com/5bdb09f0fb.js" crossorigin="anonymous"></script>
+?>
 
-        <!-- BOOTSTRAP -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-        <!-- Style CSS -->
-        <link href="./assests/style.css" rel="stylesheet">
-    </head>
-    <body>
-
+<div class="aula">
     <div class="container">
 
-        <div class="homepage my-5 text-center">
+        <?php include './includes/header.php'; ?>
 
-            <div class="row">
+        <?php
                 
-                <h2 class="pb-3 text-logo-dark"> Adicionar/editar aula </h2>
+        include './bd/conexao.php';
 
-                <form action="home.php" method="POST" class="px-3">
-                    <div class="row">
+        $sql = "SELECT * FROM materias";
+        $sql_aula = "SELECT a.id, a.materia_id, m.nome, a.data_aula, a.anotacao, a.link_aula, a.numero_aula FROM aulas a INNER JOIN materias m ON a.materia_id = m.id;";
+        $resultado_materias = $conexao->query($sql);
+        $resultado_aula = $conexao->query($sql_aula);
+        
+        if ($resultado_materias === false || $resultado_aula === false) {
+            die("Erro ao executar a query: " . $conexao->error);
+        }
 
-                        <div class="col-12">
-                            <select id="materias" name="materias" class="input-infos py-2 my-4" required>
-                                <option value="materia">lista de materias</option>
-                            </select>
+        if ($resultado_materias->num_rows > 0) { 
+
+            include './includes/form_aula.php';
+
+         } else {
+            echo '
+                <div class="d-flex justify-content-center align-items-center vh-100">
+                    <p>Ainda não há matérias disponíveis. <a href="materia.php">Adicione uma matéria</a> para depois adicionar aulas.</p>
+                </div>';
+        }
+        ?>
+
+        <div class="row">
+
+        <?php
+                
+            if ($resultado_aula === false) {
+                die("Erro ao executar a query: " . $conexao->error);
+            }
+
+            if ($resultado_aula->num_rows > 0) {
+            
+                while ($row = $resultado_aula->fetch_assoc()) {
+                    $id_aula = $row['id'];
+                    $nome_materia = $row['nome'];
+                    $data_aula = $row['data_aula'];
+                    $anotacao = $row['anotacao'];
+                    $link_aula = $row['link_aula'];
+                    $numero_aula = $row['numero_aula'];
+        ?>  
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 my-4">
+                        <div class="lista-materia">
+                            <span>Número da aula: <b><?php echo $numero_aula; ?></b></span> <br />
+                            <span>Data da aula: <b><?php echo $data_aula; ?></b></span> <br />
+                            <span>Matéria: <b><?php echo $nome_materia; ?></b></span><br />
+                            <?php
+                            if ($link_aula !== "") {
+                                echo '<span>Link da aula: <a href="'.$link_aula.'" target="_blank"><b>CLIQUE AQUI</b></span></a><br />';
+                            };
+                            ?>
+                          
+                            <span>Anotação: <p class="text-justify"><i><?php echo $anotacao; ?></i></p></span><br />
+
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 my-3 mx-auto text-center">
+                                    <a href="./bd/select_aula.php?id=<?php echo $id_aula; ?>">
+                                        <div class="btn-adicionar">
+                                            Editar
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 my-3 mx-auto text-center">
+                                    <a href="./bd/delete_aula.php?id=<?php echo $id_aula; ?>">
+                                        <div class="btn-excluir">
+                                            Excluir
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="col-12">
-                            <input type="date" id="data" name="data" class="input-infos py-2 my-4" required>
-                        </div>
-
-                        <div class="col-12">
-                            <textarea id="texto" name="texto" rows="4" cols="50" class="input-infos py-2 my-4" required></textarea>
-                        </div>
-
-                        <div class="col-12">
-                            <button type="submit" class="btn-Login">Adicionar aula <i class="fa-solid fa-circle-plus"></i></button>
-                        </div>
-
                     </div>
 
-                </form>
+                <?php
+                }
+                } else {
+                    echo '<div class="text-center"><i>Ainda não há aulas adicionadas</i></div>';
+                }
 
-            </div>
+                //$conexao->close();
+                ?>
 
         </div>
 
     </div>
-        
-    <!-- BOOTSTRAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</div>
 
-    </body>
-</html>
+<?php 
+include './includes/footer.php'; 
+?>
